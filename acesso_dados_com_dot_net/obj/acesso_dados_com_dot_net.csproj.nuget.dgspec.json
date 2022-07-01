@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj": {}
+  },
+  "projects": {
+    "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj",
+        "projectName": "acesso_dados_com_dot_net",
+        "projectPath": "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj",
+        "packagesPath": "/home/itrack/.nuget/packages/",
+        "outputPath": "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/itrack/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.data.sqlclient": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.301/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

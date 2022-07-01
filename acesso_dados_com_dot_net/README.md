@@ -5,3 +5,86 @@
 
 
 # Conexão com banco
+   - ADO.NET 
+
+
+  ### Vamos criar uma do tipo console
+   ~~~bash
+    dotnet new console
+   ~~~
+
+  perceba quel ele criou a seguinte estrutura:
+
+  - nome_da_pasta
+    - obj/
+    - nome_da_pasta.csproj 
+    - Program.cs
+
+  para isso vamos usar Nuget **Microsoft.Data.SqlClient**
+
+  usar pacotes de fontes com segurança
+
+  para dicionar o pacote utilizamos o seguinte comando:
+
+  ~~~bash
+    dotnet add package <nome do pacote>
+  ~~~
+
+  em nosso caso 
+
+  ~~~bash
+  dotnet add package Microsoft.data.sqlclient
+  ~~~
+
+  se você quer setar uma versão especifica apenas faça essa pequena mudança:
+
+  ~~~bash
+  dotnet add package Microsoft.data.sqlclient --version 2.1.3
+  ~~~
+
+  e se você quer remover o pacote execute o comando a seguir:
+
+  ~~~bash
+  dotnet remove package Microsoft.data.sqlclient
+  ~~~
+
+  perceba que dentro de **acesso_dados_com_dot_net.csproj** ele incluio ReferencePackage
+
+  ~~~cs
+  <ItemGroup>
+  <PackageReference Include="Microsoft.data.sqlclient" Version="4.1.0" />
+  </ItemGroup>
+  ~~~
+
+  Agora para usar essa package utilizamos **using**:
+
+  ~~~cs
+  using Microsoft.Data.SqlClient;
+  ~~~
+
+  o SQL Server, e varios banco utiliza **pull de conexões**, logo sempre que **abrimos** uma conexão com banco e realizamos todas as operações, **fechamos** a conexão
+
+
+~~~cs
+using Microsoft.Data.SqlClient;
+
+// See https://aka.ms/new-console-template for more information
+Console.WriteLine("Hello, World!");
+
+const string connectionString = "Server=localhost,5434;Database=TesteDB;User ID=sa;Password=Your_password123";
+
+// var connection = new SqlConnection();
+// connection.Open();
+
+// connection.Close();
+// connection.Dispose(); //ele destroi a conexão,
+
+// var connection = new SqlConnection(); // preciso instanciar novemente a conexão
+
+// forma mais otmizada
+using (var connection = new SqlConnection())
+{
+  Console.WriteLine("conectado");
+}
+
+~~~
