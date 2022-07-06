@@ -177,4 +177,21 @@ agora que criamos instalamaos o pacote, vamos criar nosso modelo.
 
   ~~~
 
-  ***perceba que com uso do Model, ganhamos um poder importante que é intelissense, assim evitando falha no desenvolvimento.***
+  **perceba que com uso do Model, ganhamos um poder importante que é intelissense, assim evitando falha no desenvolvimento.**
+
+  é importante notar que o nome das colunas da tabela **Student** no banco é o mesmo do Model **Student.cs**, isso é necessario, porque senão o **Dapper** não conseguirá diferenciar a não ser que utilize **AS**  para apelidar.
+
+
+
+  ~~~cs
+  using (var connection = new SqlConnection(connectionString))
+  {
+      var students = connection.Query<Student>("SELECT TOP (1000) [Id] AS Codigo,[Name] AS Nome FROM [dbo].[Student]");
+      foreach (var student in students)
+      {
+        Console.WriteLine($"{student.Id} - {student.Name}");
+      }
+  }
+  ~~~
+
+  **precisamos entender o que está acontecendo em baixo nível, mas isso ficará mais claro nas proximos tutoriais** 
