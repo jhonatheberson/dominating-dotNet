@@ -3,7 +3,7 @@
 // See https://aka.ms/new-console-template for more information
 Console.WriteLine("Hello, World!");
 
-const string connectionString = "Server=localhost,5434;Database=TesteDB;User ID=sa;Password=Your_password123";
+const string connectionString = "Server=worldofai.database.windows.net;Database=balta;User ID=jhonatheberson;Password=BLAZEjoao55@#";
 
 // var connection = new SqlConnection();
 // connection.Open();
@@ -23,7 +23,7 @@ using (var connection = new SqlConnection(connectionString))
   {
     command.Connection = connection;
     command.CommandType = System.Data.CommandType.Text;
-    command.CommandText = "SELECT [Id], [Title] FROM [Category]";
+    command.CommandText = "SELECT TOP (1000) [Id],[Name],[Email],[Document],[Phone],[Birthdate],[CreateDate]FROM[dbo].[Student]";
 
     var reader = command.ExecuteReader();
     while (reader.Read())

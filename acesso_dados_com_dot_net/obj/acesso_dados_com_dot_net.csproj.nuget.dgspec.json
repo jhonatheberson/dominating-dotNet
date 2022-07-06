@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj": {}
+    "/root/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj": {}
   },
   "projects": {
-    "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj": {
+    "/root/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj",
+        "projectUniqueName": "/root/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj",
         "projectName": "acesso_dados_com_dot_net",
-        "projectPath": "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj",
-        "packagesPath": "/home/itrack/.nuget/packages/",
-        "outputPath": "/home/itrack/dominating-dotNet/acesso_dados_com_dot_net/obj/",
+        "projectPath": "/root/dominating-dotNet/acesso_dados_com_dot_net/acesso_dados_com_dot_net.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/root/dominating-dotNet/acesso_dados_com_dot_net/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/itrack/.nuget/NuGet/NuGet.Config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
