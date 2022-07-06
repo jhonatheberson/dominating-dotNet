@@ -103,4 +103,78 @@ using (var connection = new SqlConnection(connectionString))
 ~~~
 
 # Dapper
-  é uma extenção do Microsftware Data Client
+  é uma extenção do Microsftware Data Client, ele faz o mapeamento.
+
+para isso vamos instalar o [Dapper](https://github.com/DapperLib/Dapper) usando o seguinte commando:
+
+~~~bash
+dotnet add package Dapper
+~~~
+
+perceba novamente que podemos abrir o arquivo **acesso_dados_com_dot_net.csproj** e verificar qual package foi adicionado.
+
+
+agora que criamos instalamaos o pacote, vamos criar nosso modelo.
+
+
+## Models
+ - geralmente para cada tabela do banco relacional, teremos um model associado a ela, porém isso não é uma verdade absoluta, apenas boas práticas
+
+ logo iremos criar uma pasta **./Models/** e dentro dela nosso primeiro arquivo referente a uma tabela do banco em nosso caso é **Student.cs**
+
+ logo nossa entrutura de projeto está assim:
+
+  - Models/
+    - Student.cs
+  - bin/
+  - obj/
+
+  se olharmos dentro do model Student.cs:
+
+  ~~~cs
+  using System;
+
+  namespace BaltaDataAcces.Models
+  {
+    public class Student
+    {
+      public Guid Id { get; set; }
+      public String Name { get; set; }
+      public String Email { get; set; }
+      public String Document { get; set; }
+      public String Phone { get; set; }
+      public DateTime Birthdate { get; set; }
+      public DateTime CreateDate { get; set; }
+    }
+
+  }
+  ~~~
+
+  perceba que esse arquivo tem as colunas da tabela Student, essencialmente. e com isso o **Dapper** nos permite o uso da metodo **Query**
+
+
+  logo para realizar a mesma operação, porém de forma mais auto nivel, utilizando o **Dapper** fica desta forma:
+
+  ~~~cs
+  using BaltaDataAcces.Models;
+  using Dapper;
+  using Microsoft.Data.SqlClient;
+
+  // See https://aka.ms/new-console-template for more information
+  Console.WriteLine("Hello, World!");
+
+  const string connectionString = "Server=worldofai.database.windows.net;Database=balta;User ID=jhonatheberson;Password=BLAZEjoao55@#";
+
+
+  using (var connection = new SqlConnection(connectionString))
+  {
+      var students = connection.Query<Student>("SELECT TOP (1000) [Id],[Name],[Email],[Document],[Phone],[Birthdate],[CreateDate]FROM[dbo].[Student]");
+      foreach (var student in students)
+      {
+        Console.WriteLine($"{student.Id} - {student.Name}");
+      }
+  }
+
+  ~~~
+
+  ***perceba que com uso do Model, ganhamos um poder importante que é intelissense, assim evitando falha no desenvolvimento.***
