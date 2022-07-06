@@ -195,3 +195,73 @@ agora que criamos instalamaos o pacote, vamos criar nosso modelo.
   ~~~
 
   **precisamos entender o que está acontecendo em baixo nível, mas isso ficará mais claro nas proximos tutoriais** 
+
+
+## INSERT
+
+  - agora vamos realizar uma inserção no banco utilizando o **Dapper**
+
+
+  para isso inicialmente entender que **NUNCA** vamos deixar string de inserção relizar concatenação, para que não ocorra **SQL INJECTION** para isso vamos utilizar parametros para poder passar as infoemações necessarias para realização do **INSERT**, esse parametrôs são identificados com "@" na frente da variavel da seguinte forma:
+
+
+  ~~~cs
+  using BaltaDataAcces.Models;
+  using Dapper;
+  using Microsoft.Data.SqlClient;
+
+  // See https://aka.ms/new-console-template for more information
+  Console.WriteLine("Hello, World!");
+
+  const string connectionString = "Server=worldofai.database.windows.net;Database=balta;User ID=jhonatheberson;Password=BLAZEjoao55@#";
+
+  var student = new Student();
+  student.Id = Guid.NewGuid();
+  student.Name = "jhonat";
+  student.Email = "jhonat@gmail.com";
+  student.Phone = "84976479384";
+  student.Birthdate = DateTime.Parse("2/16/2008 12:15:12 PM");
+  student.CreateDate = DateTime.Now;
+
+  // NÃO VAMOS CONCATENAR STRING EM SQL, PARA NÃO OCORRER SQL INJECTION
+  // O "@" FAZ QUE EU POSSA PELAS AS LINHAS
+  // O "$" FAZ QUE NÃO POSSA CONCATENAR
+  // VAMOS OPTAR POR RECEBER PARÂMETROS E RECEBE PARA METROS PELO "@"
+  var insertSql = @"INSERT INTO 
+    [Student] 
+  VALUES(
+    @Id,
+    @Nome,
+    @Email,
+    @Document,
+    @Phone,
+    @Birthdate,
+    @CreateDate)"; //vamos evitar comandos SQL como NEWID(), no C#
+
+  using (var connection = new SqlConnection(connectionString))
+  {
+      // EVITAR PROCESSAMENTO AQUI DENTRO, PORQUE A CONEXÃO ESTÁ ABERTA
+
+      //UTILIZANDO PARAMETROS PARA MONTAR SQL EXECUTE
+      var rows = connection.Execute(insertSql, new {
+        student.Id,
+        Nome = student.Name,
+        student.Email,
+        student.Document,
+        student.Phone,
+        student.Birthdate,
+        student.CreateDate
+      });
+
+      Console.WriteLine($"{rows} linhas inderidas");
+
+      var students = connection.Query<Student>("SELECT TOP (1000) [Id],[Name],[Email],[Document],[Phone],[Birthdate],[CreateDate]FROM[dbo].[Student]");
+      foreach (var item in students)
+      {
+        Console.WriteLine($"{item.Id} - {item.Name}");
+      }
+  }
+
+  ~~~
+
+  O metodo **Execute**  vai ser utilizado tanto para **INSERT**, **UPDATE** e **DELETE**
