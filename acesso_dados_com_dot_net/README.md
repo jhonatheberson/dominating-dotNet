@@ -272,7 +272,7 @@ agora que criamos instalamaos o pacote, vamos criar nosso modelo.
   - antes de iniciar o update, vamos refatorar o codigo, deixando mais modular e limpando de forma mais clara, então ficamos assim:
 
 
-   ~~~cs
+  ~~~cs
   using BaltaDataAcces.Models;
   using Dapper;
   using Microsoft.Data.SqlClient;
@@ -353,4 +353,53 @@ agora que criamos instalamaos o pacote, vamos criar nosso modelo.
     }
 
   }
-   ~~~
+  ~~~
+
+
+  com essa mudança podemos criar nosso metodo **UpdateStudent**
+
+  ~~~cs
+  static void UpdateStudent(SqlConnection connection)
+  {
+    var updateQuery = "UPDATE [Student] SET [Email]=@Email WHERE [Id]=@Id";
+
+    var rows = connection.Execute(updateQuery, new {
+      Id = new Guid("32a8c9d6-cced-478a-89b7-2adb6d5c33fa"),
+      Email = "updatefuncionou@gmail.com"
+    });
+
+    Console.WriteLine($"{rows} registros atualizados");
+  }
+  ~~~
+
+
+  agora chamamos esse metodo na função **main** da seguinte maneira:
+  
+  ~~~cs
+  static void Main(string[] args)
+    {
+
+      const string connectionString = "Server=worldofai.database.windows.net;Database=balta;User ID=jhonatheberson;Password=BLAZEjoao55@#";
+
+
+      using (var connection = new SqlConnection(connectionString))
+      {
+        // EVITAR PROCESSAMENTO AQUI DENTRO, PORQUE A CONEXÃO ESTÁ ABERTA
+        UpdateStudent(connection);
+        ListStudents(connection);
+        // CreateStudent(connection);
+
+
+      }
+
+    }
+  ~~~
+  
+  e pronto, basta executar o prejeto:
+
+
+  ~~~bash
+  dotnet run
+  ~~~
+
+# Imersão

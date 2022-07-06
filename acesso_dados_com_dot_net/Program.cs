@@ -17,7 +17,7 @@ namespace BaltaDataAccess
       using (var connection = new SqlConnection(connectionString))
       {
         // EVITAR PROCESSAMENTO AQUI DENTRO, PORQUE A CONEXÃO ESTÁ ABERTA
-
+        UpdateStudent(connection);
         ListStudents(connection);
         // CreateStudent(connection);
 
@@ -74,6 +74,18 @@ namespace BaltaDataAccess
       });
 
       Console.WriteLine($"{rows} linhas inderidas");
+    }
+
+    static void UpdateStudent(SqlConnection connection)
+    {
+      var updateQuery = "UPDATE [Student] SET [Email]=@Email WHERE [Id]=@Id";
+
+      var rows = connection.Execute(updateQuery, new {
+        Id = new Guid("32a8c9d6-cced-478a-89b7-2adb6d5c33fa"),
+        Email = "updatefuncionou@gmail.com"
+      });
+
+      Console.WriteLine($"{rows} registros atualizados");
     }
   }
 
