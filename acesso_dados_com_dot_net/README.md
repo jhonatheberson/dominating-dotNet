@@ -537,3 +537,36 @@ agora que criamos instalamaos o pacote, vamos criar nosso modelo.
 ## Lendo Procedures
 
 - aqui a diferença que queremos pegar o retorno da procedure
+
+  primeiramente precisamos criar a procedure que ira pegar as informações:
+
+  ~~~sql
+  CREATE OR ALTER PROCEDURE [spGetStudent] 
+      @StudentId UNIQUEIDENTIFIER
+  AS
+      SELECT * FROM [Student] WHERE [Id] = @StudentId
+  ~~~
+
+  apos cria nossa procedure, vamos executala em nosso codigo criando o seguinte metodo:
+
+  ~~~cs
+  static void ExecuteReadProcedure(SqlConnection connection)
+    {
+      var procedure = "[spGetStudent]";
+      var pars = new { StudentId = "c55390d4-71dd-4f3c-b978-d1582f51a327" };
+      var students = connection.Query(procedure, pars, commandType: CommandType.StoredProcedure);
+
+      foreach (var item in students)
+      {
+        Console.WriteLine(item.Name); // aqui a tipos não é disponivel, porque é variavel dinamica
+      }
+    }
+  ~~~
+
+  algumas coisa importante a notar, preceba que estamos utilizando o metodo **Query** porém sem a tipagem dele, como fizemos antes, logo esse metodo retorna para nos um variavel dinâmica, não teremos acesso ao recusos intelisense, assim o **C#** caso o metodo **item.Name** não existe não conseguira informar, somente terá excessão em tempo de execução e não de compilação.
+
+  *particulamente é melhor utilizar os recursos da tipagem para isso basta fazer da seguinte maneira:*
+
+  ~~~cs
+  var students = connection.Query<Students>(procedure, pars, commandType: CommandType.StoredProcedure);
+  ~~~

@@ -22,10 +22,11 @@ namespace BaltaDataAccess
         // DeleteStudent(connection);
         // ListStudents(connection);
         // CreateManyStudent(connection);
-        ListStudents(connection);
+        // ListStudents(connection);
         // CreateStudent(connection);
-        ExecuteProcedure(connection);
-        ListStudents(connection);
+        ExecuteReadProcedure(connection);
+        // ExecuteProcedure(connection);
+        // ListStudents(connection);
 
 
       }
@@ -175,6 +176,17 @@ namespace BaltaDataAccess
       var affectedRows = connection.Execute(procedure, pars, commandType: CommandType.StoredProcedure);
 
       Console.WriteLine($"{affectedRows} linhas afetadas");
+    }
+    static void ExecuteReadProcedure(SqlConnection connection)
+    {
+      var procedure = "[spGetStudent]";
+      var pars = new { StudentId = "c55390d4-71dd-4f3c-b978-d1582f51a327" };
+      var students = connection.Query(procedure, pars, commandType: CommandType.StoredProcedure);
+
+      foreach (var item in students)
+      {
+        Console.WriteLine(item.Name); // aqui a tipos não é disponivel, porque é variavel dinamica
+      }
     }
 
   }
