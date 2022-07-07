@@ -403,3 +403,137 @@ agora que criamos instalamaos o pacote, vamos criar nosso modelo.
   ~~~
 
 # Imersão
+
+  -  agora vamos utilizar arquitetura algumas SQL mais dethalhados
+
+  ## Execute Many
+
+  - inicialmente vamos cirar o metodo **DELETE** para finalizar nossa **CRUD** nosso metodo DELETE ficou desta forma:
+
+
+    ~~~cs
+    static void DeleteStudent(SqlConnection connection)
+    {
+      var updateQuery = "DELETE FROM [Student] WHERE [Id]=@Id";
+
+      var rows = connection.Execute(updateQuery, new {
+        Id = new Guid("32a8c9d6-cced-478a-89b7-2adb6d5c33fa")
+      });
+
+      Console.WriteLine($"{rows} registros deletado");
+    }
+    ~~~
+
+    agora com CRUD criado, vamos utilizar para criar Varios **Student** ou seja **Many**:
+
+    ~~~cs
+    static void CreateManyStudent(SqlConnection connection)
+      {
+        var student = new Student();
+        student.Id = Guid.NewGuid();
+        student.Name = "jhonat";
+        student.Email = "jhonat@gmail.com";
+        student.Phone = "84976479384";
+        student.Birthdate = DateTime.Parse("2/16/2008 12:15:12 PM");
+        student.CreateDate = DateTime.Now;
+
+        var student2 = new Student();
+        student2.Id = Guid.NewGuid();
+        student2.Name = "jhonatnovo";
+        student2.Email = "jhonatnovo@gmail.com";
+        student2.Phone = "84976479384";
+        student2.Birthdate = DateTime.Parse("4/28/1997 12:15:12 PM");
+        student2.CreateDate = DateTime.Now;
+
+        // NÃO VAMOS CONCATENAR STRING EM SQL, PARA NÃO OCORRER SQL INJECTION
+        // O "@" FAZ QUE EU POSSA PELAS AS LINHAS
+        // O "$" FAZ QUE NÃO POSSA CONCATENAR
+        // VAMOS OPTAR POR RECEBER PARÂMETROS E RECEBE PARA METROS PELO "@"
+        var insertSql = @"INSERT INTO 
+          [Student] 
+        VALUES(
+          @Id,
+          @Name,
+          @Email,
+          @Document,
+          @Phone,
+          @Birthdate,
+          @CreateDate)"; //vamos evitar comandos SQL como NEWID(), no C#
+
+
+        //UTILIZANDO PARAMETROS PARA MONTAR SQL EXECUTE
+        var rows = connection.Execute(insertSql, new[]{
+        new
+        {
+          student.Id,
+          student.Name,
+          student.Email,
+          student.Document,
+          student.Phone,
+          student.Birthdate,
+          student.CreateDate
+        },
+        new
+        {
+          student2.Id,
+          student2.Name,
+          student2.Email,
+          student2.Document,
+          student2.Phone,
+          student2.Birthdate,
+          student2.CreateDate
+        }
+        });
+
+        Console.WriteLine($"{rows} linhas inderidas");
+      }
+    ~~~
+
+    perceba que as principais diferencias que agora estou passando uma lista no **Execute**, essa forma também serve para **UpdateMany** como **DeleteMany**.
+
+## Executando procedures
+
+- agora vamos mostrar como executar procedures dentro do banco, utilizando C#, mas para isso precisamos criar a procedure no banco, assim executando este script:
+
+
+  ~~~sql
+  CREATE OR ALTER PROCEDURE spDeleteStudent (
+      @StudentId UNIQUEIDENTIFIER
+  )
+  AS
+      BEGIN TRANSACTION
+          DELETE FROM 
+              [StudentCourse] 
+          WHERE 
+              [StudentId] = @StudentId
+
+          DELETE FROM 
+              [Student] 
+          WHERE 
+              [Id] = @StudentId
+      COMMIT
+  ~~~
+
+  essencialmente essa procedure executa **TRANSACTION** deletando sdudent
+
+  nosso metodo que executa proceddure ficou desa forma:
+
+  ~~~cs
+  static void ExecuteProcedure(SqlConnection connection)
+  {
+    var procedure = "[spDeleteStudent]";
+    var pars = new { StudentId = "3140e182-f7ff-4392-b09f-bf1e3f0461b4" };
+    var affectedRows = connection.Execute(procedure, pars, commandType: CommandType.StoredProcedure);
+
+    Console.WriteLine($"{affectedRows} linhas afetadas");
+  }
+  ~~~
+
+
+  algumas coisa são importante observar nesse metodo, primeiramente que precisamos passar **commandType** a qual para execução de procedure é **System.Data.CommandType.StoredProcedure**. 
+
+  também perceba que a procedure recebe parametros, uma boa prática é utilizar o mesmo nome do parâmetros da procedura também para executação em que nosso caso é **StudentId**
+
+## Lendo Procedures
+
+- aqui a diferença que queremos pegar o retorno da procedure
