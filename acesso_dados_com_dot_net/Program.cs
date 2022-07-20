@@ -12,7 +12,7 @@ namespace BaltaDataAccess
     static void Main(string[] args)
     {
 
-      const string connectionString = "Server=worldofai.database.windows.net;Database=balta;User ID=jhonatheberson;Password=BLAZEjoao55@#";
+      const string connectionString = "Server=balta.chrbdzefu2yy.us-east-1.rds.amazonaws.com;Database=balta;User ID=jhonatheberson;Password=BLAZEjoao55#";
 
 
       using (var connection = new SqlConnection(connectionString))
@@ -24,11 +24,11 @@ namespace BaltaDataAccess
         // CreateManyStudent(connection);
         // ListStudents(connection);
         // CreateStudent(connection);
-        ExecuteReadProcedure(connection);
+        // ExecuteReadProcedure(connection);
         // ExecuteProcedure(connection);
         // ListStudents(connection);
 
-
+        Console.WriteLine("conectou");
       }
 
     }
