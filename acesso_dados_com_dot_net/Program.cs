@@ -12,7 +12,8 @@ namespace BaltaDataAccess
     static void Main(string[] args)
     {
 
-      const string connectionString = "Server=balta.chrbdzefu2yy.us-east-1.rds.amazonaws.com;Database=balta;User ID=jhonatheberson;Password=BLAZEjoao55#";
+      // const string connectionString = "Server=localhost,1433;Database=balta;User ID=sa;Password=yourStrong(!)Password";
+      const string connectionString = "Server=localhost,1433;Database=balta;User ID=sa;Password=yourStrong(!)Password;TrustServerCertificate=true";
 
 
       using (var connection = new SqlConnection(connectionString))
@@ -23,10 +24,10 @@ namespace BaltaDataAccess
         // ListStudents(connection);
         // CreateManyStudent(connection);
         // ListStudents(connection);
-        // CreateStudent(connection);
+        CreateStudent(connection);
         // ExecuteReadProcedure(connection);
         // ExecuteProcedure(connection);
-        // ListStudents(connection);
+        //ListStudents(connection);
 
         Console.WriteLine("conectou");
       }
