@@ -24,10 +24,12 @@ namespace BaltaDataAccess
         // ListStudents(connection);
         // CreateManyStudent(connection);
         // ListStudents(connection);
-        CreateStudent(connection);
+        // CreateStudent(connection);
         // ExecuteReadProcedure(connection);
         // ExecuteProcedure(connection);
         //ListStudents(connection);
+        // ExecuteScalar(connection);
+        ReadView(connection);
 
         Console.WriteLine("conectou");
       }
@@ -190,6 +192,55 @@ namespace BaltaDataAccess
       }
     }
 
+    static void ExecuteScalar(SqlConnection connection)
+    {
+      var student = new Student();
+      student.Name = "jhonat";
+      student.Email = "jhonat@gmail.com";
+      student.Phone = "84976479384";
+      student.Birthdate = DateTime.Parse("2/16/2008 12:15:12 PM");
+      student.CreateDate = DateTime.Now;
+
+      // NÃO VAMOS CONCATENAR STRING EM SQL, PARA NÃO OCORRER SQL INJECTION
+      // O "@" FAZ QUE EU POSSA PELAS AS LINHAS
+      // O "$" FAZ QUE NÃO POSSA CONCATENAR
+      // VAMOS OPTAR POR RECEBER PARÂMETROS E RECEBE PARA METROS PELO "@"
+      var insertSql = @"INSERT INTO 
+        [Student] 
+      OUTPUT inserted.[Id]
+      VALUES(
+        NEWID(),
+        @Nome,
+        @Email,
+        @Document,
+        @Phone,
+        @Birthdate,
+        @CreateDate)"; //vamos evitar comandos SQL como NEWID(), no C#
+
+
+      //UTILIZANDO PARAMETROS PARA MONTAR SQL EXECUTE
+      var id = connection.ExecuteScalar<Guid>(insertSql, new
+      {
+        Nome = student.Name,
+        student.Email,
+        student.Document,
+        student.Phone,
+        student.Birthdate,
+        student.CreateDate
+      });
+
+      Console.WriteLine($"A Id do student foi: {id} ");
+    }
+
+    static void ReadView(SqlConnection connection)
+    {
+      var sql = "SELECT * FROM [vwStudent]";
+      var students = connection.Query(sql);
+      foreach (var item in students)
+      {
+        Console.WriteLine($"{item.Id} - {item.Name}");
+      }
+    }
   }
 
 }

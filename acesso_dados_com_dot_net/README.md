@@ -570,3 +570,91 @@ agora que criamos instalamaos o pacote, vamos criar nosso modelo.
   ~~~cs
   var students = connection.Query<Students>(procedure, pars, commandType: CommandType.StoredProcedure);
   ~~~
+
+## ExecuteScalar
+
+ - ele permite que execute algo, e retorne um valor diferente por exemplo quero saber o ID do que foi alterado ou inserido.
+
+ para isso funcionar utilizamos a diretiva **ExecuteScalar** da seguinte forma:
+
+
+ ~~~cs
+static void ExecuteScalar(SqlConnection connection)
+    {
+      var student = new Student();
+      student.Name = "jhonat";
+      student.Email = "jhonat@gmail.com";
+      student.Phone = "84976479384";
+      student.Birthdate = DateTime.Parse("2/16/2008 12:15:12 PM");
+      student.CreateDate = DateTime.Now;
+
+      // NÃO VAMOS CONCATENAR STRING EM SQL, PARA NÃO OCORRER SQL INJECTION
+      // O "@" FAZ QUE EU POSSA PELAS AS LINHAS
+      // O "$" FAZ QUE NÃO POSSA CONCATENAR
+      // VAMOS OPTAR POR RECEBER PARÂMETROS E RECEBE PARA METROS PELO "@"
+      var insertSql = @"INSERT INTO 
+        [Student] 
+      OUTPUT inserted.[Id]
+      VALUES(
+        NEWID(),
+        @Nome,
+        @Email,
+        @Document,
+        @Phone,
+        @Birthdate,
+        @CreateDate)"; //vamos evitar comandos SQL como NEWID(), no C#
+
+
+      //UTILIZANDO PARAMETROS PARA MONTAR SQL EXECUTE
+      var id = connection.ExecuteScalar<Guid>(insertSql, new
+      {
+        Nome = student.Name,
+        student.Email,
+        student.Document,
+        student.Phone,
+        student.Birthdate,
+        student.CreateDate
+      });
+
+      Console.WriteLine($"A Id do student foi: {id} ");
+    }
+ ~~~
+
+  perceba que duas coisas importantes foram alteradas:
+  
+  - primeiramente não estou mais passando o id, e sim gerando o id a partir da diretiva **NEWID()**.
+
+  - segundo, na instrução SQL para retornar o valor precisa fazer um select infromando qual infromação será retornada, em nossa caso utilizamos a diretiva **OUTPUT inserted.[Id]** para infromar isso ao banco e ele retornar o id
+
+  também conseguimos trazer varias colunas dentro dele:
+  
+  ~~~cs
+  ExecuteScalar<Guid, Int ...>
+  ~~~
+
+## Views
+  - as Views no SQL Serve serve como fosse uma SELECT, um exemplo é este:
+
+  ~~~sql
+  SELECT * FROM Student s ;
+
+  CREATE VIEW vwStudent AS SELECT * from [Student]
+
+  SELECT * FROM [vwStudent]
+  ~~~
+
+  agora para executar o **View** dentro do projeto faremos da seguinte maneira:
+
+  ~~~cs
+  static void ReadView(SqlConnection connection)
+    {
+      var sql = "SELECT * FROM [vwStudent]";
+      var students = connection.Query(sql);
+      foreach (var item in students)
+      {
+        Console.WriteLine($"{item.Id} - {item.Name}");
+      }
+    }
+  ~~~ 
+
+  perceba que não muda nada, porque a sintaxe do SQL também não muda.
