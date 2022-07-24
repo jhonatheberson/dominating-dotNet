@@ -658,3 +658,7 @@ static void ExecuteScalar(SqlConnection connection)
   ~~~ 
 
   perceba que não muda nada, porque a sintaxe do SQL também não muda.
+
+## OnetoOne - relacionamento um para um
+
+  
